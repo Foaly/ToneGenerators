@@ -1,5 +1,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
+
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -7,79 +8,8 @@
 const double PI = std::atan(1.0) * 4.0;
 const double twoPI = 2.0 * PI;
 
-class Sinusoid
-{
-public:
-    Sinusoid(double _frequency, double _amplitude, double _sampleRate) :
-        frequency(_frequency),
-        amplitude(_amplitude),
-        sampleRate(_sampleRate),
-        phi(0.0)
-    {
-
-    }
-
-    double getNextSample()
-    {
-        double sample = std::sin(phi);
-
-        phi += twoPI * frequency / sampleRate;
-
-        return amplitude * sample;
-    }
-
-    double frequency;
-    double amplitude;
-    double sampleRate;
-    double phi;
-};
-
-
-
-class Triangle
-{
-public:
-    Triangle(double _frequency, double _amplitude, double _sampleRate) :
-        frequency(_frequency),
-        amplitude(_amplitude),
-        sampleRate(_sampleRate),
-        phi(0.0),
-        previousSample(0.0),
-        sign(1)
-    {
-
-    }
-
-    double getNextSample()
-    {
-        double step = twoPI * frequency / sampleRate;
-
-        previousSample += step * sign * 0.5;
-
-        if (previousSample > 1.0)
-        {
-            previousSample -= previousSample - 1.0; // wrap around
-            sign = -1;
-        }
-        else if (previousSample < -1.0)
-        {
-            previousSample -= previousSample + 1.0; // wrap around
-            sign = 1;
-        }
-
-        return amplitude * previousSample;
-    }
-
-    double frequency;
-    double amplitude;
-    double sampleRate;
-    double phi;
-
-private:
-    double previousSample;
-    signed char sign;
-};
-
+#include "Sinusoid.hpp"
+#include "Triangle.hpp"
 
 
 int main() {
@@ -99,7 +29,7 @@ int main() {
         rawSample = triangle.getNextSample();
         triangle.frequency *= 0.9999;
     }
-    
+
     // abhängig von der Frequenz ausfaden (4 * phase)
 
     sf::SoundBuffer Buffer;
