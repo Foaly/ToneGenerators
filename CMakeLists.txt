@@ -18,6 +18,7 @@ set(EXECUTABLE_NAME "${PROJECT_NAME}")
 set(SOURCE_FILES src/main.cpp
                  src/Sinusoid.hpp
                  src/Triangle.hpp
+                 src/Sawtooth.hpp
                  )
 
 # when we are on MacOS create a bundle and

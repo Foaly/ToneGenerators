@@ -11,6 +11,7 @@ const double twoPI = 2.0 * PI;
 
 #include "Sinusoid.hpp"
 #include "Triangle.hpp"
+#include "Sawtooth.hpp"
 
 
 int main() {
@@ -22,12 +23,13 @@ int main() {
     double frequency = 190.0;
     Sinusoid sinus(frequency, 0.9, SAMPLE_RATE);
     Triangle triangle(frequency, 0.9, SAMPLE_RATE);
+    Sawtooth sawtooth(frequency, 0.9, SAMPLE_RATE);
 
 
     for (auto& rawSample: rawSamples)
     {
-        rawSample = sinus.getNextSample();
-        sinus.frequency *= 0.9999;
+        rawSample = sawtooth.getNextSample();
+        sawtooth.frequency *= 0.9999;
     }
     
     // TODO: abhängig von der Frequenz ausfaden (4 * phase)
@@ -41,14 +43,14 @@ int main() {
                    });
     
 
-    sf::SoundBuffer Buffer;
-    if (!Buffer.loadFromSamples(intSamples.data(), intSamples.size(), 1, SAMPLE_RATE)) {
-        std::cerr << "Loading failed!" << std::endl;
+    sf::SoundBuffer soundBuffer;
+    if (!soundBuffer.loadFromSamples(intSamples.data(), intSamples.size(), 1, SAMPLE_RATE)) {
+        std::cerr << "Failed to load sound buffer!" << std::endl;
         return 1;
     }
 
     sf::Sound sound;
-    sound.setBuffer(Buffer);
+    sound.setBuffer(soundBuffer);
     sound.setLoop(true);
     sound.play();
 
@@ -57,6 +59,11 @@ int main() {
             break;
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             break;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {
+            soundBuffer.saveToFile("output.wav");
+            std::cout << "Saved file \"output.wav\"" << std::endl;
+        }
 
         sf::sleep(sf::milliseconds(100));
     }
