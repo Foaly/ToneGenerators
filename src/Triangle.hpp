@@ -10,41 +10,41 @@ public:
         frequency(_frequency),
         amplitude(_amplitude),
         sampleRate(_sampleRate),
-        phi(0.0),
-        previousSample(0.0),
-        sign(1)
+        m_nextSample(0.0),
+        m_sign(1)
     {
 
     }
 
     double getNextSample()
     {
-        double step = twoPI * frequency / sampleRate;
+        double sample = m_nextSample;
+        
+        double step = 4.0 * frequency / sampleRate;
 
-        previousSample += step * sign * 0.5;
+        m_nextSample += step * m_sign;
 
-        if (previousSample > 1.0)
+        if (m_nextSample > 1.0)
         {
-            previousSample -= previousSample - 1.0; // wrap around
-            sign = -1;
+            m_nextSample = 1.0 - (m_nextSample - 1.0); // wrap around
+            m_sign = -1;
         }
-        else if (previousSample < -1.0)
+        else if (m_nextSample < -1.0)
         {
-            previousSample -= previousSample + 1.0; // wrap around
-            sign = 1;
+            m_nextSample = -1.0 - (m_nextSample + 1.0); // wrap around
+            m_sign = 1;
         }
 
-        return amplitude * previousSample;
+        return amplitude * sample;
     }
 
     double frequency;
     double amplitude;
     double sampleRate;
-    double phi;
 
 private:
-    double previousSample;
-    signed char sign;
+    double m_nextSample;
+    signed char m_sign;
 };
 
 #endif // TRIANGLE_INCLUDE
