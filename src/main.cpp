@@ -28,8 +28,8 @@ int main() {
 
     for (auto& rawSample: rawSamples)
     {
-        rawSample = sawtooth.getNextSample();
-        sawtooth.frequency *= 0.9999;
+        rawSample = sinus.getNextSample();
+        sinus.frequency(sinus.frequency() * 0.9999);
     }
     
     // TODO: abhängig von der Frequenz ausfaden (4 * phase)
